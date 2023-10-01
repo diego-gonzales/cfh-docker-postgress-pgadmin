@@ -1,0 +1,29 @@
+# version de docker-compose
+version: '3'
+
+# services
+services:
+  postgres-db:
+    container_name: my-postgres-db
+    image: postgres:15.1
+    volumes:
+      # - postgres-db:/var/lib/postgresql/data
+      - ./postgres-db:/var/lib/postgresql/data # crea un bind volume entre el directorio actual (en la carpeta 'postgres-db') y el directorio del contenedor
+    environment:
+      - POSTGRES_PASSWORD=123456
+
+  pg-admin:
+    depends_on:
+      - postgres-db
+    image: dpage/pgadmin4:6.17
+    ports:
+      - 8080:80
+    volumes:
+      - ./pg-admin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=prueba@prueba.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+# volumes
+# volumes:
+#   postgres-db:
+#     external: true # esta opción me permite vincular con un volumen externo (uno existente)
